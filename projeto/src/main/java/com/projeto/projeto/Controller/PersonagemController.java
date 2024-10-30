@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.projeto.projeto.Repository.PersonagemRepository;
 import com.projeto.projeto.Service.PersonagemService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,9 +28,6 @@ public class PersonagemController {
     @Autowired
     private PersonagemService personagemService;
 
-    @Autowired
-    private PersonagemRepository personagemRepository;
-
     @GetMapping()
     public ResponseEntity<List<Personagem>> findAll() {
         return ResponseEntity.ok().body(personagemService.findAll());
@@ -42,9 +38,8 @@ public class PersonagemController {
         return ResponseEntity.ok().body(personagemService.findById(pIdPersonagem));
     }
 
-    @PostMapping(value = "/{pIdPersonagem}")
-    public ResponseEntity<Personagem> inserePersonagem(@RequestBody Personagem personagem,
-            @PathVariable Integer pIdPersonagem) {
+    @PostMapping
+    public ResponseEntity<Personagem> inserePersonagem(@RequestBody Personagem personagem) {
         Personagem vNovPersonagem = personagemService.inserePersonagem(personagem);
 
         URI vUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/personagem/{pIdPersonagem}")
@@ -53,32 +48,25 @@ public class PersonagemController {
         return ResponseEntity.created(vUri).body(vNovPersonagem);
     }
 
+    @PostMapping("/{pIdPersonagem}/ator/{pIdAtor}")
+    public ResponseEntity<MensagemDTO> insAtorPersonagem(@PathVariable Integer pIdPersonagem, @PathVariable Integer pIdAtor) {
+        personagemService.insAtorPersonagem(pIdPersonagem, pIdAtor);
+        
+        return ResponseEntity.ok().body(new MensagemDTO("OK", "Ator "+pIdAtor+" inserido no personagem " + pIdPersonagem));
+    }
+    
     @PutMapping("/{pIdPersonagem}")
     public ResponseEntity<Personagem> updatePersonagem(@PathVariable Integer pIdPersonagem,
             @RequestBody Personagem pPersonagem) {
 
-        Personagem pPersoAtual = personagemRepository
-                .findById(pIdPersonagem)
-                .orElseThrow();
+        Personagem vNovPersonagem = personagemService.updPersonagem(pIdPersonagem, pPersonagem);
 
-        if (pPersonagem.getCaracteristicas() != null) {
-            pPersoAtual.setCaracteristicas(pPersonagem.getCaracteristicas());
-        }
-
-        if (pPersonagem.getNome() != null) {
-            pPersoAtual.setNome(pPersonagem.getNome());
-        }
-
-        personagemRepository.save(pPersoAtual);
-
-        return ResponseEntity.ok().body(pPersoAtual);
+        return ResponseEntity.ok().body(vNovPersonagem);
     }
 
     @DeleteMapping("/{pIdPersonagem}")
-    public ResponseEntity<MensagemDTO> deletePersonagem(@PathVariable Integer pIdPersonagem){
-        personagemService.deletePersonagem(pIdPersonagem);
-
-        return ResponseEntity.ok().body(new MensagemDTO("ok", "Funcionario "+ pIdPersonagem + " deletado com sucesso"));
+    public ResponseEntity<MensagemDTO> delPersonagem(@PathVariable Integer pIdPersonagem){
+        return personagemService.delPersonagem(pIdPersonagem);
     }
 
 }

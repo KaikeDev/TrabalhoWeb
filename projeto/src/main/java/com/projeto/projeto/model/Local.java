@@ -4,14 +4,19 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.annotations.ManyToAny;
+import org.hibernate.validator.constraints.Length;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -28,10 +33,17 @@ public class Local implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idLocal;
+    private Integer idLocal;
 
+    @NotNull(message = "Nome do local não pode ser nulo!")
+    @NotBlank(message = "Nome do local não pode ser branco!")
+    @Length(min = 3, max = 50, message = "Nome do local deve estar entre 3 e 255 caracteres!")
+    private String nmLocal;
+
+    @Length(max = 255, message = "História local não pode ser maior que 255 caracteres")
     private String historiaLocal;
 
-    @OneToMany(mappedBy = "localObra")
-    private List<Obra> obras = new ArrayList<>()
-;}
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "locais")
+    @JsonIgnoreProperties({"atores"})
+    private List<Obra> obras = new ArrayList<>();
+}
