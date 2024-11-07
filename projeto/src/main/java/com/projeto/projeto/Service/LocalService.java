@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.projeto.projeto.Repository.LocalRepository;
-import com.projeto.projeto.Repository.ObraRepository;
 import com.projeto.projeto.exception.NoSuchElementException;
 import com.projeto.projeto.model.Local;
 import com.projeto.projeto.model.MensagemDTO;
@@ -20,8 +19,6 @@ public class LocalService {
     @Autowired
     private LocalRepository localRepository;
 
-    @Autowired
-    private ObraRepository obraRepository;
 
     // GET ALL
     public List<Local> findAll() {

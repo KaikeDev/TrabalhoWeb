@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.projeto.projeto.Service.ObraService;
-import com.projeto.projeto.model.Local;
 import com.projeto.projeto.model.MensagemDTO;
 import com.projeto.projeto.model.Obra;
 

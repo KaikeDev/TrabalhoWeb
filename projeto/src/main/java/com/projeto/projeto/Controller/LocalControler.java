@@ -6,7 +6,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.projeto.projeto.Service.LocalService;
 import com.projeto.projeto.model.Local;
 import com.projeto.projeto.model.MensagemDTO;
-import com.projeto.projeto.model.Obra;
 
 import java.net.URI;
 import java.util.List;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 
 

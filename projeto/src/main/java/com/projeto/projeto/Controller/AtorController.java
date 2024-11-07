@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 import java.util.List;
 
 import com.projeto.projeto.Service.AtorService;
@@ -41,9 +44,11 @@ public class AtorController {
     
     @PostMapping
     public ResponseEntity<Ator> insAtor(@RequestBody Ator pAtor) {
-        atorService.insAtor(pAtor);
+        Ator vNovAtor = atorService.insAtor(pAtor);
 
-        return ResponseEntity.ok().body(pAtor);
+        URI vUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/ator/{pIdAtor}")
+                .buildAndExpand(vNovAtor.getIdAtor()).toUri();
+        return ResponseEntity.created(vUri).body(vNovAtor);
     }
     
     @PutMapping("/{pIdAtor}")
