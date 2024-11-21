@@ -7,10 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.projeto.projeto.Repository.CategoriaRepository;
 import com.projeto.projeto.Repository.LocalRepository;
 import com.projeto.projeto.Repository.ObraRepository;
 import com.projeto.projeto.Repository.PersonagemRepository;
 import com.projeto.projeto.exception.NoSuchElementException;
+import com.projeto.projeto.model.Categoria;
 import com.projeto.projeto.model.Local;
 import com.projeto.projeto.model.MensagemDTO;
 import com.projeto.projeto.model.Obra;
@@ -21,6 +23,9 @@ public class ObraService {
     
     @Autowired
     private ObraRepository obraRepository;
+
+    @Autowired
+    private CategoriaRepository categoriaRepository;
 
     @Autowired
     private PersonagemRepository personagemRepository;
@@ -37,13 +42,24 @@ public class ObraService {
     public Obra findById(Integer pIdObra) {
         Obra vObra = obraRepository
             .findById(pIdObra)
-            .orElseThrow();
+            .orElseThrow(
+                () -> new com.projeto.projeto.exception.NoSuchElementException("Obra " + pIdObra + " não encontrada!")
+            );
         
         return vObra;
     }
 
-    public Obra insObra(Obra pObra) {
+    // POST
+    public Obra insObra(Obra pObra, Integer pIdCategoria) {
+        Categoria vCategoria = categoriaRepository
+            .findById(pIdCategoria)
+            .orElseThrow(
+                () -> new com.projeto.projeto.exception.NoSuchElementException("Categoria " + pIdCategoria + " não encontrada!")
+            );
+        
+
         pObra.setIdObra(null);
+        pObra.setCategoriaObra(vCategoria);
         return obraRepository.save(pObra);
     }
 
@@ -93,10 +109,13 @@ public class ObraService {
         return vObra;
     }
 
+    // PUT
     public Obra updObra(Integer pIdObra, Obra pObra){
         Obra pObraAtual = obraRepository
             .findById(pIdObra)
-            .orElseThrow();
+            .orElseThrow(
+                () -> new com.projeto.projeto.exception.NoSuchElementException("Obra " + pIdObra + " não encontrada!")
+            );
 
         if(pObra.getTitulo() != null) {
             pObraAtual.setTitulo(pObra.getTitulo());
@@ -110,12 +129,15 @@ public class ObraService {
         return pObraAtual;
     }
 
+    // DELETE
     public ResponseEntity<MensagemDTO> delObra(Integer pIdObra){
         try{
             obraRepository
                 .findById(pIdObra)
-                .orElseThrow(() -> new com.projeto.projeto.exception.NoSuchElementException(
-                    "Obra " + pIdObra + " não encontrada!"));
+                .orElseThrow(
+                    () -> new com.projeto.projeto.exception.NoSuchElementException(
+                    "Obra " + pIdObra + " não encontrada!")
+                    );
 
             obraRepository.deleteById(pIdObra);
             return ResponseEntity.ok().body(new MensagemDTO("OK", "OK"));

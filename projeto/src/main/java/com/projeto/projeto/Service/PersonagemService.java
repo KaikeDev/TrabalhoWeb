@@ -33,7 +33,9 @@ public class PersonagemService {
     public Personagem findById(Integer pIdPersonagem) {
         Personagem vPersonagem = personagemRepository
                 .findById(pIdPersonagem)
-                .orElseThrow();
+                .orElseThrow(
+                    () -> new com.projeto.projeto.exception.NoSuchElementException("Personagem " + pIdPersonagem + " não encontrado!")
+                );
 
         return vPersonagem;
     }
@@ -68,7 +70,9 @@ public class PersonagemService {
     public Personagem updPersonagem(Integer pIdPersonagem, Personagem pPersonagem) {
         Personagem vPersonagem = personagemRepository
                 .findById(pIdPersonagem)
-                .orElseThrow();
+                .orElseThrow(
+                    () -> new com.projeto.projeto.exception.NoSuchElementException("Personagem " + pIdPersonagem + " não encontrado!")
+                );
 
         if (pPersonagem.getCaracteristicas() != null) {
             vPersonagem.setCaracteristicas(pPersonagem.getCaracteristicas());
@@ -82,6 +86,7 @@ public class PersonagemService {
         return vPersonagem;
     }
 
+    // DELETE
     public ResponseEntity<MensagemDTO> delPersonagem(Integer pIdPersonagem){
         try {
             Personagem vPersonagem = personagemRepository

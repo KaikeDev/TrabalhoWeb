@@ -28,7 +28,9 @@ public class AtorService {
     public Ator findById(Integer pIdAtor) {
         Ator vAtor = atorRepository
             .findById(pIdAtor)
-            .orElseThrow();
+            .orElseThrow(
+                () -> new com.projeto.projeto.exception.NoSuchElementException("Ator " + pIdAtor + " não encontrado!")
+            );
         
         return vAtor;
     }

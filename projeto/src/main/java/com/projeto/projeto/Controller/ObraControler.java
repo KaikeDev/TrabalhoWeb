@@ -40,9 +40,9 @@ public class ObraControler {
         return ResponseEntity.ok().body(obraService.findById(pIdObra));
     }
     
-    @PostMapping
-    public ResponseEntity<Obra> insObra(@RequestBody Obra pObra) {
-        Obra vNovObra = obraService.insObra(pObra);
+    @PostMapping(value = "/{pIdCategoria}")
+    public ResponseEntity<Obra> insObra(@PathVariable Integer pIdCategoria,@RequestBody Obra pObra) {
+        Obra vNovObra = obraService.insObra(pObra, pIdCategoria);
 
         URI vUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/obra/{pIdObra}")
                 .buildAndExpand(vNovObra.getIdObra()).toUri();

@@ -29,7 +29,9 @@ public class LocalService {
     public Local findById(Integer pIdLocal) {
         Local vLocal = localRepository
             .findById(pIdLocal)
-            .orElseThrow();
+            .orElseThrow(
+                () -> new com.projeto.projeto.exception.NoSuchElementException("Local " + pIdLocal + " não encontrado!")
+            );
 
         return vLocal;
     }
@@ -44,7 +46,9 @@ public class LocalService {
     public Local updLocal(Integer pIdLocal, Local pLocal){
         Local vLocal = localRepository
             .findById(pIdLocal)
-            .orElseThrow();
+            .orElseThrow(
+                () -> new com.projeto.projeto.exception.NoSuchElementException("Local " + pIdLocal + " não encontrado!")
+            );
 
         if (pLocal.getNmLocal() != null){
             vLocal.setNmLocal(pLocal.getNmLocal());

@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -37,7 +39,7 @@ public class Categoria implements Serializable{
     @Length(min = 4, max = 50, message = "Nome da categoria deve ter entre 4 a 50 caracteres")
     private String nomeCategoria;
 
-
+    @JsonIgnore
     @OneToMany(mappedBy="categoriaObra")
     private List<Obra> obras = new ArrayList<>();
 }
